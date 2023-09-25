@@ -5,7 +5,7 @@ import json
 import pandas as pd
 
 class CustomDataset(Dataset):
-    def __init__(self, data, config, transforms = None):
+    def __init__(self, data, config, preprocess = None):
         super().__init__()
         self.data = data
         self.config = config
@@ -17,16 +17,15 @@ class CustomDataset(Dataset):
         self.labels = data.class_label
         self.brands = data.brand
         self.prompt = config["global"]['PROMPT']
-        self.transforms = transforms
+        self.preprocess = preprocess
 
     def __getitem__(self, index):
         img_path = self.image_folder + self.image_paths[index]
         # print(img_path)
         img = cv2.imread(img_path)
         # img = None
-        if self.transforms is not None:
-            for transform in self.transforms:
-                img = transform(img)
+        if self.preprocess is not None:
+            img = self.preprocess(img)
         
         img_caption = self.prompt.format(self.captions[index], self.brands[index], self.labels[index])
         
