@@ -1,11 +1,11 @@
 from torch import nn
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 import cv2
 import json
 import pandas as pd
 
 class CustomDataset(Dataset):
-    def __init__(self, data, config):
+    def __init__(self, data, config, transforms = None):
         super().__init__()
         self.data = data
         self.config = config
@@ -17,18 +17,28 @@ class CustomDataset(Dataset):
         self.labels = data.class_label
         self.brands = data.brand
         self.prompt = config["global"]['PROMPT']
+        self.transforms = transforms
 
     def __getitem__(self, index):
         img_path = self.image_folder + self.image_paths[index]
         # print(img_path)
         img = cv2.imread(img_path)
         # img = None
+        if self.transforms is not None:
+            for transform in self.transforms:
+                img = transform(img)
+        
         img_caption = self.prompt.format(self.captions[index], self.brands[index], self.labels[index])
         
         return img, img_caption
 
     def __len__(self):
         return len(self.captions)
+
+
+def dataLoader(dataset, configs):
+    batch_size = configs['global']['BATCH_SIZE']
+    return DataLoader(dataset, batch_size = batch_size)
 
 if __name__ == "__main__":
     def open_json_file(path):
