@@ -11,7 +11,7 @@ def obtain_args():
         formatter_class = argparse.ArgumentDefaultsHelpFormatter
     )
 
-    parser.add_argument("--config_paths", type = str, default = "config/clip.yaml")
+    parser.add_argument("--config_paths", type = str, default = "/kaggle/working/CLIP/config/clip.yaml")
     args = parser.parse_args()
     return args
 
