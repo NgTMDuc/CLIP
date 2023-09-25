@@ -8,7 +8,7 @@ from torch import optim
 from utils.basic_args import obtain_args
 from utils.load_config import load_config
 from utils.load_json_file import open_json_file
-from dataset.customDataset import CustomDataset, dataloader
+from dataset.customDataset import CustomDataset, dataLoader
 from clip.model import convert_weights
 
 def convert_models_to_fp32(model):
@@ -66,13 +66,13 @@ def train(args):
                 convert_models_to_fp32(model)
                 optimizer.step()
                 clip.model.convert_weights(model)
-                
+
     torch.save({
         'epoch': epoch,
         'model_state_dict': model.state_dict(),
         'optimizer_state_dict': optimizer.state_dict(),
         'loss': total_loss,
-        }, checkpoint_path) #just change to your preferred folder/filename
+        }, checkpoint_path) 
     
 if __name__ == "__main__":
     args = obtain_args()
