@@ -5,7 +5,12 @@ global:
 
   image_folder: "/kaggle/input/indo-fashion-dataset/"
 
+  # train_path: "train_data.json"
+  # test_path: "test_data.json"
+  # valid_path: "val_data.json"
+
+  # image_folder: "/kaggle/input/indo-fashion-dataset/"
   EPOCHS: 100
   BATCH_SIZE: 32
 
-  prompt:  Title of this product is {}. This from brand {} and has class label is {} 
+  PROMPT:  Title of this product is {}. This from brand {} and has class label is {} 
