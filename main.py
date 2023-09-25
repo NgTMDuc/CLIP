@@ -17,8 +17,9 @@ def convert_models_to_fp32(model):
         p.grad.data = p.grad.data.float()
 
 def train(args):
-    model, preprocess = clip.load("ViT-B/32",device=device,jit=False) #Must set jit=False for training
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    model, preprocess = clip.load("ViT-B/32",device=device,jit=False) #Must set jit=False for training
+    
     # Configuration
     config = args.config_paths
     configs = load_config(config)
