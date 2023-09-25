@@ -34,9 +34,9 @@ def train(args):
     valid_json = open_json_file(valid_path_json)
     test_json = open_json_file(test_path_json)
     
-    train_data = dataloader(CustomDataset(train_json, configs), configs)
-    test_data = dataloader(CustomDataset(test_json, configs), configs)
-    valid_data = dataloader(CustomDataset(valid_json, configs), configs)
+    train_data = dataLoader(CustomDataset(train_json, configs), configs)
+    test_data = dataLoader(CustomDataset(test_json, configs), configs)
+    valid_data = dataLoader(CustomDataset(valid_json, configs), configs)
 
     # TODO: fine tune clip
     loss_img = nn.CrossEntropyLoss()
@@ -59,7 +59,7 @@ def train(args):
             
             total_loss = (image_loss + text_loss)/2
             
-            print("Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, total_loss, image_loss, text_loss))
+            print("Train - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, total_loss, image_loss, text_loss))
             total_loss.backward()
             if device == "cuda":
                 optimizer.step()
@@ -67,6 +67,23 @@ def train(args):
                 convert_models_to_fp32(model)
                 optimizer.step()
                 clip.model.convert_weights(model)
+        
+        with torch.no_grad():
+            loss_test = 0
+            for batch in valid_data:
+                images, texts = batch
+                images = images.to(device)
+                texts = texts.to(device)
+
+                logits_per_image, logits_per_text = model(images, texts)
+                ground_truth = torch.arange(len(images),dtype=torch.long,device=device)
+                image_loss = loss_img(logits_per_image,ground_truth)
+                text_loss = loss_text(logits_per_text,ground_truth)
+                batch_loss = (image_loss + text_loss)/2
+                loss_test += batch_loss
+            loss_test /= len(valid_data)
+            print("Valid - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, loss_test, image_loss, text_loss))
+
 
     torch.save({
         'epoch': epoch,
