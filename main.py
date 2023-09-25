@@ -34,9 +34,9 @@ def train(args):
     valid_json = open_json_file(valid_path_json)
     test_json = open_json_file(test_path_json)
     
-    train_data = dataLoader(CustomDataset(train_json, configs), configs, preprocess)
-    test_data = dataLoader(CustomDataset(test_json, configs), configs, preprocess)
-    valid_data = dataLoader(CustomDataset(valid_json, configs), configs, preprocess)
+    train_data = dataLoader(CustomDataset(train_json, configs, preprocess), configs)
+    test_data = dataLoader(CustomDataset(test_json, configs, preprocess), configs)
+    valid_data = dataLoader(CustomDataset(valid_json, configs, preprocess), configs)
 
     # TODO: fine tune clip
     loss_img = nn.CrossEntropyLoss()
