@@ -11,6 +11,7 @@ from utils.load_json_file import open_json_file
 from dataset.customDataset import CustomDataset, dataLoader
 from clip.model import convert_weights
 from clip.clip import tokenize
+from utils.processText import process_text
 
 def convert_models_to_fp32(model):
     for p in model.parameters():
@@ -49,6 +50,7 @@ def train(args):
             optimizer.zero_grad()
 
             images, texts = batch
+            texts = process_text(texts)
             texts = clip.tokenize(texts)
             images = images.to(device)
             texts = texts.to(device)
@@ -74,6 +76,7 @@ def train(args):
             loss_test = 0
             for batch in valid_data:
                 images, texts = batch
+                texts = process_text(texts)
                 texts = clip.tokenize(texts)
                 images = images.to(device)
                 texts = texts.to(device)
