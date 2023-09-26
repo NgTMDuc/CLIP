@@ -50,7 +50,7 @@ def train(args):
     # TODO: change code to train and eval model
     loss_img = nn.CrossEntropyLoss()
     loss_text = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=1e-4,betas=(0.9,0.98),eps=1e-9,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
+    optimizer = optim.Adam(model.parameters(), lr=1e-5,betas=(0.9,0.98),eps=1e-9,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
     logger.info("Start training")
 
     for epoch in range(EPOCH):
