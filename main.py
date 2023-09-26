@@ -11,6 +11,8 @@ from utils.load_json_file import open_json_file
 from dataset.customDataset import CustomDataset, dataLoader
 from clip.model import convert_weights
 from clip.clip import tokenize
+from utils import setup_logger
+from datetime import datetime
 from utils.processText import process_text
 
 def convert_models_to_fp32(model):
@@ -19,6 +21,7 @@ def convert_models_to_fp32(model):
         p.grad.data = p.grad.data.float()
 
 def train(args):
+    
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model, preprocess = clip.load("ViT-B/32",device=device,jit=False) #Must set jit=False for training
     
@@ -26,6 +29,7 @@ def train(args):
     config = args.config_paths
     configs = load_config(config)
     EPOCH = configs['global']['EPOCHS']
+    logger = setup_logger("CLIP", configs["global"]['log_path'], str(datetime.now()) + ".log")
     checkpoint_path = configs['global']["checkpoint_path"]
     # Load dataset
     train_path_json = configs['global']['train_path']
@@ -40,10 +44,14 @@ def train(args):
     test_data = dataLoader(CustomDataset(test_json, configs, preprocess), configs)
     valid_data = dataLoader(CustomDataset(valid_json, configs, preprocess), configs)
 
+    logger.info("Number of train images: " + str(len(train_data)))
+    logger.info("Number of validation images: " + str(len(valid_data)))
+
     # TODO: change code to train and eval model
     loss_img = nn.CrossEntropyLoss()
     loss_text = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=2e-4,betas=(0.9,0.98),eps=1e-9,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
+    logger.info("Start training")
 
     for epoch in range(EPOCH):
         for batch in train_data:
@@ -60,10 +68,12 @@ def train(args):
             
             image_loss = loss_img(logits_per_image,ground_truth)
             text_loss = loss_text(logits_per_text,ground_truth)
-            
+
             total_loss = (image_loss + text_loss)/2
             
-            print("Train - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, total_loss, image_loss, text_loss))
+            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(batch, batch *2, epoch, total_loss, image_loss, text_loss))
+            logger.info("Iter [%d] Loss: %f" % (batch, total_loss))
+
             total_loss.backward()
 
             if device == "cuda":
