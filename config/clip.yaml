@@ -1,6 +1,7 @@
 global: 
   train_path: "/kaggle/input/indo-fashion-dataset/train_data.json"
-  test_path: "/kaggle/input/indo-fashion-dataset/test_data.json"
+  # test_path: "/kaggle/input/indo-fashion-dataset/test_data.json"
+  test_path: "test_data.json"
   valid_path: "/kaggle/input/indo-fashion-dataset/val_data.json"
 
   image_folder: "/kaggle/input/indo-fashion-dataset/"

@@ -10,6 +10,7 @@ from utils.load_config import load_config
 from utils.load_json_file import open_json_file
 from dataset.customDataset import CustomDataset, dataLoader
 from clip.model import convert_weights
+from clip.clip import tokenize
 
 def convert_models_to_fp32(model):
     for p in model.parameters():
@@ -34,9 +35,9 @@ def train(args):
     valid_json = open_json_file(valid_path_json)
     test_json = open_json_file(test_path_json)
     
-    train_data = dataLoader(CustomDataset(train_json, configs, preprocess), configs)
-    test_data = dataLoader(CustomDataset(test_json, configs, preprocess), configs)
-    valid_data = dataLoader(CustomDataset(valid_json, configs, preprocess), configs)
+    train_data = dataLoader(CustomDataset(train_json, configs, preprocess, tokenize), configs)
+    test_data = dataLoader(CustomDataset(test_json, configs, preprocess, tokenize), configs)
+    valid_data = dataLoader(CustomDataset(valid_json, configs, preprocess, tokenize), configs)
 
     # TODO: fine tune clip
     loss_img = nn.CrossEntropyLoss()
