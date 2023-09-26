@@ -11,7 +11,7 @@ from utils.load_json_file import open_json_file
 from dataset.customDataset import CustomDataset, dataLoader
 from clip.model import convert_weights
 from clip.clip import tokenize
-from utils import setup_logger
+from utils.log_utils import setup_logger
 from datetime import datetime
 from utils.processText import process_text
 
