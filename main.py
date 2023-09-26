@@ -29,7 +29,7 @@ def train(args):
     config = args.config_paths
     configs = load_config(config)
     EPOCH = configs['global']['EPOCHS']
-    logger = setup_logger("CLIP", configs["global"]['log_path'], str(datetime.now()) + ".log")
+    logger = setup_logger("CLIP", configs["global"]['log_path'], "CLIP_" + str(datetime.now()) + ".log")
     checkpoint_path = configs['global']["checkpoint_path"]
     # Load dataset
     train_path_json = configs['global']['train_path']
