@@ -22,9 +22,8 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, index):
         img_path = self.image_folder + self.image_paths[index]
-        # print(img_path)
-        # img = cv2.imread(img_path)
-        img = 1
+        img = cv2.imread(img_path)
+        # img = 1
         if self.preprocess is not None:
             img = self.preprocess(img)
         
@@ -32,7 +31,7 @@ class CustomDataset(Dataset):
         
         if self.tokenize is not None:
             img_caption = self.tokenize(img_caption)
-            
+
         return img, img_caption
 
     def __len__(self):
