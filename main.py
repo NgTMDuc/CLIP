@@ -74,6 +74,7 @@ def train(args):
             loss_test = 0
             for batch in valid_data:
                 images, texts = batch
+                texts = clip.tokenize(texts)
                 images = images.to(device)
                 texts = texts.to(device)
 
