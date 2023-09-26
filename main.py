@@ -50,7 +50,7 @@ def train(args):
     # TODO: change code to train and eval model
     loss_img = nn.CrossEntropyLoss()
     loss_text = nn.CrossEntropyLoss()
-    optimizer = optim.Adam(model.parameters(), lr=1e-5,betas=(0.9,0.98),eps=1e-9,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
+    optimizer = optim.Adam(model.parameters(), lr=5e-4,betas=(0.9,0.98),eps=1e-6,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
     logger.info("Start training")
 
     for epoch in range(EPOCH):
@@ -72,8 +72,8 @@ def train(args):
 
             total_loss = (image_loss + text_loss)/2
             
-            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(iter, (iter+1)*configs["global"]["BATCH_SIZE"], epoch, total_loss, image_loss, text_loss))
-            logger.info("Iter [%d:%d] Loss: %f" % (iter, (iter+1)*configs["global"]["BATCH_SIZE"], total_loss))
+            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(iter**configs["global"]["BATCH_SIZE"], (iter+1)*configs["global"]["BATCH_SIZE"], epoch, total_loss, image_loss, text_loss))
+            logger.info("Iter [%d:%d] Loss: %f" % (iter*configs["global"]["BATCH_SIZE"], (iter+1)*configs["global"]["BATCH_SIZE"], total_loss))
 
             total_loss.backward()
 
