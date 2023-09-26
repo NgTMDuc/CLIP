@@ -9,5 +9,5 @@ global:
   EPOCHS: 5
   BATCH_SIZE: 32
   checkpoint_path : "/kaggle/working/model_checkpoint/modelCLIP.pt"
-  log_path: "kaggle/working/CLIP-finetune/"
+  log_path: "kaggle/working/"
   PROMPT:  Title of this product is {}. This from brand {} and has class label is {} 
