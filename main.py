@@ -54,6 +54,7 @@ def train(args):
     logger.info("Start training")
 
     for epoch in range(EPOCH):
+        iter = 0
         for batch in train_data:
             optimizer.zero_grad()
 
@@ -71,8 +72,8 @@ def train(args):
 
             total_loss = (image_loss + text_loss)/2
             
-            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(batch, batch *2, epoch, total_loss, image_loss, text_loss))
-            logger.info("Iter [%d] Loss: %f" % (batch, total_loss))
+            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(iter, (iter+1)*configs["BATCH_SIZE"], epoch, total_loss, image_loss, text_loss))
+            logger.info("Iter [%d:%d] Loss: %f" % (iter, (iter+1)*configs["BATCH_SIZE"], total_loss))
 
             total_loss.backward()
 
