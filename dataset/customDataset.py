@@ -3,9 +3,11 @@ from torch.utils.data import Dataset, DataLoader
 import cv2
 import json
 import pandas as pd
+from PIL import Image
+from torchvision import transforms
 
 class CustomDataset(Dataset):
-    def __init__(self, data, config, preprocess = None, tokenize = None):
+    def __init__(self, data, config, preprocess = None):
         super().__init__()
         self.data = data
         self.config = config
@@ -18,19 +20,21 @@ class CustomDataset(Dataset):
         self.brands = data.brand
         self.prompt = config["global"]['PROMPT']
         self.preprocess = preprocess
-        self.tokenize = tokenize
+        # self.tokenize = tokenize
 
     def __getitem__(self, index):
         img_path = self.image_folder + self.image_paths[index]
-        img = cv2.imread(img_path)
+        # print(img_path)
+        img = Image.open(img_path)
+        # img = transforms.ToPILImage(img)
+        
+        # print(img.shape)
         # img = 1
         if self.preprocess is not None:
             img = self.preprocess(img)
         
         img_caption = self.prompt.format(self.captions[index], self.brands[index], self.labels[index])
         
-        if self.tokenize is not None:
-            img_caption = self.tokenize(img_caption)
 
         return img, img_caption
 
