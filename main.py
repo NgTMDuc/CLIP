@@ -50,7 +50,7 @@ def train(args):
             optimizer.zero_grad()
 
             images, texts = batch
-            texts = process_text(texts)
+            # texts = process_text(texts)
             texts = clip.tokenize(texts)
             images = images.to(device)
             texts = texts.to(device)
@@ -76,7 +76,7 @@ def train(args):
             loss_test = 0
             for batch in valid_data:
                 images, texts = batch
-                texts = process_text(texts)
+                # texts = process_text(texts)
                 texts = clip.tokenize(texts)
                 images = images.to(device)
                 texts = texts.to(device)
