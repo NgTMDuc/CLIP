@@ -72,8 +72,8 @@ def train(args):
 
             total_loss = (image_loss + text_loss)/2
             
-            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(iter, (iter+1)*configs["BATCH_SIZE"], epoch, total_loss, image_loss, text_loss))
-            logger.info("Iter [%d:%d] Loss: %f" % (iter, (iter+1)*configs["BATCH_SIZE"], total_loss))
+            print("Train - Iter: {} - {}, Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(iter, (iter+1)*configs["global"]["BATCH_SIZE"], epoch, total_loss, image_loss, text_loss))
+            logger.info("Iter [%d:%d] Loss: %f" % (iter, (iter+1)*configs["global"]["BATCH_SIZE"], total_loss))
 
             total_loss.backward()
 
