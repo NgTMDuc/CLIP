@@ -7,7 +7,7 @@ global:
   image_folder: "/kaggle/input/indo-fashion-dataset/"
 
   EPOCHS: 5
-  BATCH_SIZE: 32
+  BATCH_SIZE: 512
   checkpoint_path : "/kaggle/working/model_checkpoint/modelCLIP.pt"
   log_path: "/kaggle/working/CLIP_finetune/"
   PROMPT:  Title of this product is {}. This from brand {} and has class label is {} 
