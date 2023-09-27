@@ -65,7 +65,7 @@ def train(args):
             texts = texts.to(device)
 
             logits_per_image, logits_per_text = model(images, texts)
-            ground_truth = torch.arange(len(images),dtype=torch.long,device=device)
+            ground_truth = torch.arange(configs["global"]["BATCH_SIZE"],dtype=torch.long,device=device)
             
             image_loss = loss_img(logits_per_image,ground_truth)
             text_loss = loss_text(logits_per_text,ground_truth)
@@ -85,23 +85,23 @@ def train(args):
                 clip.model.convert_weights(model)
             iter += 1
 
-        with torch.no_grad():
-            loss_test = 0
-            for batch in valid_data:
-                images, texts = batch
-                # texts = process_text(texts)
-                texts = clip.tokenize(texts)
-                images = images.to(device)
-                texts = texts.to(device)
+        # with torch.no_grad():
+        #     loss_test = 0
+        #     for batch in valid_data:
+        #         images, texts = batch
+        #         # texts = process_text(texts)
+        #         texts = clip.tokenize(texts)
+        #         images = images.to(device)
+        #         texts = texts.to(device)
 
-                logits_per_image, logits_per_text = model(images, texts)
-                ground_truth = torch.arange(len(images),dtype=torch.long,device=device)
-                image_loss = loss_img(logits_per_image,ground_truth)
-                text_loss = loss_text(logits_per_text,ground_truth)
-                batch_loss = (image_loss + text_loss)/2
-                loss_test += batch_loss
-            loss_test /= len(valid_data)
-            print("Valid - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, loss_test, image_loss, text_loss))
+        #         logits_per_image, logits_per_text = model(images, texts)
+        #         ground_truth = torch.arange(len(images),dtype=torch.long,device=device)
+        #         image_loss = loss_img(logits_per_image,ground_truth)
+        #         text_loss = loss_text(logits_per_text,ground_truth)
+        #         batch_loss = (image_loss + text_loss)/2
+        #         loss_test += batch_loss
+        #     loss_test /= len(valid_data)
+        #     print("Valid - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, loss_test, image_loss, text_loss))
 
     if os.path.isfile(checkpoint_path) is False:
         with open(checkpoint_path, "r"):
