@@ -47,7 +47,7 @@ def train(args):
     logger.info("Number of train images: " + str(len(train_data)))
     logger.info("Number of validation images: " + str(len(valid_data)))
 
-    # TODO: change code to train and eval model
+    
     loss_img = nn.CrossEntropyLoss()
     loss_text = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=5e-4,betas=(0.9,0.98),eps=1e-6,weight_decay=0.2) #Params used from paper, the lr is smaller, more safe for fine tuning to new dataset
@@ -103,6 +103,9 @@ def train(args):
             loss_test /= len(valid_data)
             print("Valid - Epoch: {} , total loss: {}, image loss: {}, text loss: {}".format(epoch, loss_test, image_loss, text_loss))
 
+    if os.path.isfile(checkpoint_path) is False:
+        with open(checkpoint_path, "r"):
+            pass
 
     torch.save({
         'epoch': epoch,
